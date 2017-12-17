@@ -1,0 +1,38 @@
+{
+  "name": "yipingshi-crawler",
+  "version": "1.0.0",
+  "description": "A crawler for yipingshi.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frederick-wang/yipingshi-crawler.git"
+  },
+  "keywords": [
+    "crawler"
+  ],
+  "author": "Frederick Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frederick-wang/yipingshi-crawler/issues"
+  },
+  "homepage": "https://github.com/frederick-wang/yipingshi-crawler#readme",
+  "dependencies": {
+    "async": "^2.6.0",
+    "cheerio": "^1.0.0-rc.2",
+    "eventproxy": "^1.0.0",
+    "superagent": "^3.8.2",
+    "superagent-charset": "^1.2.0",
+    "urlencode": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.1",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
