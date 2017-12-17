@@ -83,6 +83,11 @@ function start () {
           let dlNodes = $('.c_content_photos').find('dl').children('dt').children('p')
           if (dlNodes.length === 0) {
             console.log(`${school}(${id})没有老师！`)
+            console.log(`开始创建${school}(${id})的空文件……`)
+            console.log(`创建文件 output/${province}/${school}.csv`)
+            fs.writeFileSync(`output/${province.province}/${school}.csv`, '')
+            console.log(`${province.province}/${school} 空文件创建完毕！`)
+            console.log('----------')
             callback(null, {
               school: school,
               teachers: teachers
@@ -96,6 +101,15 @@ function start () {
             console.log(`${school}(${id})第1/${endPage}页老师抓取完成！`)
             if (endPage < 2) {
               console.log(`${school}(${id})全部老师抓取完成！`)
+              console.log(`开始保存${school}(${id})老师数据……`)
+              console.log(`创建文件 output/${province}/${school}.csv`)
+              fs.writeFileSync(`output/${province.province}/${school}.csv`, '')
+              console.log(`正在写入数据 output/${province.province}/${school}.csv ……`)
+              for (let teacherData of teachers) {
+                fs.appendFileSync(`output/${province.province}/${school}.csv`, `${teacherData.name},${teacherData.school},${teacherData.college}\r\n`)
+              }
+              console.log(`${province.province}/${school} 全部老师数据保存完毕！`)
+              console.log('----------')
               callback(null, {
                 school: school,
                 teachers: teachers
@@ -153,6 +167,15 @@ function start () {
                 teachers = teachers.concat(tmpTeachers)
               }
               console.log(`${school}(${id})全部老师抓取完成！`)
+              console.log(`开始保存${school}(${id})老师数据……`)
+              console.log(`创建文件 output/${province}/${school}.csv`)
+              fs.writeFileSync(`output/${province.province}/${school}.csv`, '')
+              console.log(`正在写入数据 output/${province.province}/${school}.csv ……`)
+              for (let teacherData of teachers) {
+                fs.appendFileSync(`output/${province.province}/${school}.csv`, `${teacherData.name},${teacherData.school},${teacherData.college}\r\n`)
+              }
+              console.log(`${province.province}/${school} 全部老师数据保存完毕！`)
+              console.log('----------')
               callback(null, {
                 school: school,
                 teachers: teachers
@@ -195,27 +218,5 @@ function start () {
       return console.error(err)
     }
     console.log(`所有数据全部抓取完成！包括${results.map(item => item.province).join()}共${results.length}个省！`)
-    save(results)
   })
-}
-
-function save (data) {
-  console.log('开始保存数据……')
-  for (let provinceData of data) {
-    console.log(`创建目录 output/${provinceData.province}/`)
-    fs.mkdirSync(`output/${provinceData.province}/`)
-    for (let schoolData of provinceData.schools) {
-      console.log(`创建文件 output/${provinceData.province}/${schoolData.school}.csv`)
-      fs.writeFileSync(`output/${provinceData.province}/${schoolData.school}.csv`, '')
-      console.log(`正在写入数据 output/${provinceData.province}/${schoolData.school}.csv ……`)
-      for (let teacherData of schoolData.teachers) {
-        fs.appendFileSync(`output/${provinceData.province}/${schoolData.school}.csv`, `${teacherData.name},${teacherData.school},${teacherData.college}\r\n`)
-      }
-      console.log(`${provinceData.province}/${schoolData.school} 全部老师数据保存完毕！`)
-      console.log('----------')
-    }
-    console.log(`${provinceData.province} 全部学校数据保存完毕！`)
-    console.log('----------')
-  }
-  console.log(`${data.map(item => item.province).join()}共${data.length}个省的数据全部保存完毕！`)
 }
