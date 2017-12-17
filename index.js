@@ -64,3 +64,34 @@ for (let provName of provinceNames) {
       }
     })
 }
+
+function start () {
+  async.mapSeries(provinces.slice(0, 1), (item, callback) => {
+    let province = item.province
+    async.mapSeries(item.schools, (item, callback) => {
+      let school = item.school
+      let id = item.id
+      superagent.get(`http://daxue.netbig.com/${id}/teacher/`)
+        .end((err, res) => {
+          if (err) {
+            callback(err)
+            return console.error(err)
+          }
+          console.log(`${province}的id为${id}的${school}第一页数据获取完成`)
+          callback(null, id + '_success')
+        })
+    }, (err, results) => {
+      if (err) {
+        callback(err)
+        return console.error(err)
+      }
+      console.log(`${province}数据全部抓取完成！`, results)
+      callback(null, province + '_success')
+    })
+  }, (err, results) => {
+    if (err) {
+      return console.error(err)
+    }
+    console.log(`所有数据全部抓取完成！`, results)
+  })
+}
