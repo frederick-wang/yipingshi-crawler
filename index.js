@@ -87,11 +87,13 @@ function start () {
             console.log(`创建文件 output/${province}/${school}.csv`)
             fs.writeFileSync(`output/${province.province}/${school}.csv`, '')
             console.log(`${province.province}/${school} 空文件创建完毕！`)
-            console.log('----------')
-            callback(null, {
-              school: school,
-              teachers: teachers
-            })
+            console.log('-----开始10分钟的等待-----')
+            setTimeout(() => {
+              callback(null, {
+                school: school,
+                teachers: teachers
+              })
+            }, 1000 * 60 * 10)
             return
           }
           let tmpA = $('.page_one').find('a')
@@ -109,11 +111,13 @@ function start () {
                 fs.appendFileSync(`output/${province.province}/${school}.csv`, `${teacherData.name},${teacherData.school},${teacherData.college}\r\n`)
               }
               console.log(`${province.province}/${school} 全部老师数据保存完毕！`)
-              console.log('----------')
-              callback(null, {
-                school: school,
-                teachers: teachers
-              })
+              console.log('-----开始10分钟的等待-----')
+              setTimeout(() => {
+                callback(null, {
+                  school: school,
+                  teachers: teachers
+                })
+              }, 1000 * 60 * 10)
               return
             }
             // 处理多页
@@ -175,11 +179,13 @@ function start () {
                 fs.appendFileSync(`output/${province.province}/${school}.csv`, `${teacherData.name},${teacherData.school},${teacherData.college}\r\n`)
               }
               console.log(`${province.province}/${school} 全部老师数据保存完毕！`)
-              console.log('----------')
-              callback(null, {
-                school: school,
-                teachers: teachers
-              })
+              console.log('-----开始10分钟的等待-----')
+              setTimeout(() => {
+                callback(null, {
+                  school: school,
+                  teachers: teachers
+                })
+              }, 1000 * 60 * 10)
             })
           })
           dlNodes.find('a').each((index, element) => {
