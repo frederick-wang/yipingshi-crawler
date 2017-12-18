@@ -9,7 +9,7 @@ const urlencode = require('urlencode')
 const async = require('async')
 const fs = require('fs')
 
-let provinceNames = ['山东', '河南', '甘肃', '四川', '江西']
+let provinceNames = ['山东', '河南', '甘肃', '四川', '江西', '重庆', '内蒙古', '宁夏']
 let provinces = []
 
 // Prepare
