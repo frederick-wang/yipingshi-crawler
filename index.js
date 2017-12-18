@@ -9,7 +9,7 @@ const urlencode = require('urlencode')
 const async = require('async')
 const fs = require('fs')
 
-let provinceNames = ['山东', '河南', '甘肃', '内蒙古', '四川', '江西']
+let provinceNames = ['山东', '河南', '甘肃', '四川', '江西']
 let provinces = []
 
 // Prepare
@@ -71,7 +71,7 @@ for (let provName of provinceNames) {
 
 // 正式开始
 function start () {
-  async.mapSeries(provinces.slice(0, 1), (item, callback) => {
+  async.mapSeries(provinces, (item, callback) => {
     let province = item.province
     async.mapSeries(item.schools, (item, callback) => {
       let school = item.school
