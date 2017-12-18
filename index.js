@@ -15,8 +15,11 @@ let provinces = []
 // Prepare
 ep.after(`province_fetched`, provinceNames.length, data => {
   provinces = data
+  console.log(`数据准备完毕，一切正常！`)
+  console.log(`开始爬取！本次需要爬取的地区包括${provinceNames.join()}共${provinceNames.length}个地区`)
   start()
 })
+console.log(`开始准备数据，本次需要爬取的地区包括${provinceNames.join()}共${provinceNames.length}个地区`)
 for (let provName of provinceNames) {
   let provUrl = `http://daxue.netbig.com/search/?prov=${urlencode(provName)}`
   superagent.get(provUrl)
@@ -39,6 +42,7 @@ for (let provName of provinceNames) {
         for (let schs of tmpSchools) {
           schools = schools.concat(schs)
         }
+        console.log(`${provName}数据准备完成！`)
         ep.emit('province_fetched', {
           province: provName,
           schools: schools
@@ -183,7 +187,7 @@ function start () {
                       .end((err, res) => {
                         if (err) {
                           callback(err)
-                          return console.error(err)
+                          return console.log(err)
                         }
                         let $ = cheerio.load(res.text)
                         let p3 = $('.b_techer1_con_l1').find('p')
@@ -201,7 +205,7 @@ function start () {
             }, (err, results) => {
               if (err) {
                 callback(err)
-                return console.error(err)
+                return console.log(err)
               }
               for (let tmpTeachers of results) {
                 teachers = teachers.concat(tmpTeachers)
@@ -255,7 +259,7 @@ function start () {
     }, (err, results) => {
       if (err) {
         callback(err)
-        return console.error(err)
+        return console.log(err)
       }
       console.log(`${province}数据全部抓取完成！共${results.length}所学校！`)
       callback(null, {
@@ -265,7 +269,13 @@ function start () {
     })
   }, (err, results) => {
     if (err) {
-      return console.error(err)
+      console.log(err)
+      console.log('发生错误！休眠五分钟后再继续！')
+      console.log('-----开始休眠5分钟-----')
+      setTimeout(() => {
+        start()
+      }, 1000 * 60 * 5)
+      return
     }
     console.log(`所有数据全部抓取完成！包括${results.map(item => item.province).join()}共${results.length}个省！`)
   })
