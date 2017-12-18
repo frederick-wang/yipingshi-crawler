@@ -18,10 +18,6 @@ ep.after(`province_fetched`, provinceNames.length, data => {
   start()
 })
 for (let provName of provinceNames) {
-  try {
-    fs.mkdirSync(`output/${provName}/`)
-  } catch (error) {
-  }
   let provUrl = `http://daxue.netbig.com/search/?prov=${urlencode(provName)}`
   superagent.get(provUrl)
     .end((err, res) => {
@@ -71,6 +67,26 @@ for (let provName of provinceNames) {
 
 // 正式开始
 function start () {
+  // 过滤掉已经存在的学校
+  for (let i = 0; i < provinces.length; i++) {
+    let provinceData = provinces[i]
+    let province = provinceData.province
+    for (let j = 0; j < provinceData.schools.length; j++) {
+      let schoolData = provinceData.schools[j]
+      let school = schoolData.school
+      if (fs.existsSync(`output/${province}/${school}.csv`)) {
+        console.log(`output/${province}/${school}.csv 已经存在，跳过该学校！`)
+        provinceData.schools.splice(j, 1)
+        j--
+      }
+    }
+    if (provinceData.schools.length === 0) {
+      console.log(`所有${province}的学校都已经被跳过，跳过该地区！`)
+      provinces.splice(i, 1)
+      i--
+    }
+  }
+  // 开始爬取
   async.mapSeries(provinces, (item, callback) => {
     let province = item.province
     async.mapSeries(item.schools, (item, callback) => {
@@ -87,6 +103,14 @@ function start () {
           let dlNodes = $('.c_content_photos').find('dl').children('dt').children('p')
           if (dlNodes.length === 0) {
             console.log(`${school}(${id})没有老师！`)
+            if (!fs.existsSync(`output/`)) {
+              console.log(`创建文件夹 output/`)
+              fs.mkdirSync(`output/`)
+            }
+            if (!fs.existsSync(`output/${province}/`)) {
+              console.log(`创建文件夹 output/${province}/`)
+              fs.mkdirSync(`output/${province}/`)
+            }
             console.log(`开始创建${school}(${id})的空文件……`)
             console.log(`创建文件 output/${province}/${school}.csv`)
             fs.writeFileSync(`output/${province}/${school}.csv`, '')
@@ -108,6 +132,14 @@ function start () {
             if (endPage < 2) {
               console.log(`${school}(${id})全部老师抓取完成！`)
               console.log(`开始保存${school}(${id})老师数据……`)
+              if (!fs.existsSync(`output/`)) {
+                console.log(`创建文件夹 output/`)
+                fs.mkdirSync(`output/`)
+              }
+              if (!fs.existsSync(`output/${province}/`)) {
+                console.log(`创建文件夹 output/${province}/`)
+                fs.mkdirSync(`output/${province}/`)
+              }
               console.log(`创建文件 output/${province}/${school}.csv`)
               fs.writeFileSync(`output/${province}/${school}.csv`, '')
               console.log(`正在写入数据 output/${province}/${school}.csv ……`)
@@ -176,6 +208,14 @@ function start () {
               }
               console.log(`${school}(${id})全部老师抓取完成！`)
               console.log(`开始保存${school}(${id})老师数据……`)
+              if (!fs.existsSync(`output/`)) {
+                console.log(`创建文件夹 output/`)
+                fs.mkdirSync(`output/`)
+              }
+              if (!fs.existsSync(`output/${province}/`)) {
+                console.log(`创建文件夹 output/${province}/`)
+                fs.mkdirSync(`output/${province}/`)
+              }
               console.log(`创建文件 output/${province}/${school}.csv`)
               fs.writeFileSync(`output/${province}/${school}.csv`, '')
               console.log(`正在写入数据 output/${province}/${school}.csv ……`)
